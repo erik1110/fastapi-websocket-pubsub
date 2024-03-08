@@ -1,0 +1,14 @@
+services:
+  redis:
+    container_name: redis
+    image: redis:7
+  backend:
+      container_name: websocket
+      build: "backend/."
+      volumes:
+        - ./backend:/usr/src/app
+      ports:
+        - "5000:5000"
+      command: uvicorn app.main:app --host 0.0.0.0 --workers 4 --port 5000 --reload
+      environment:
+        - REDIS_URI=redis://redis:6379
